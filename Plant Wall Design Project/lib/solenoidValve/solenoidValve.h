@@ -5,6 +5,7 @@
 
 class solenoidValve{
     private:
+    bool valveIsOpen;
 
     public:
     void valveOpen();

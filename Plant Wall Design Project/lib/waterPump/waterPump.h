@@ -9,6 +9,7 @@ class waterPump{
     public:
     void pumpOpen();
     void pumpClose();
+    void getPumpStatus();
 
 };
 

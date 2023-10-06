@@ -10,6 +10,7 @@ class solenoidValve{
     public:
     void valveOpen();
     void valveClose();
+    void getValveStatus();
 
 };
 

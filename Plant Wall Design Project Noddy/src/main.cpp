@@ -91,25 +91,8 @@ void reconnect() {
 }
 
 void setup() {
-  // Initialize pin modes
-  pinMode(flowSensor1, INPUT);
-  pinMode(flowSensor2, INPUT); 
-  pinMode(flowSensor3, INPUT);
-  
-  pinMode(solenoidValve1, OUTPUT);
-  pinMode(solenoidValve2, OUTPUT);
-  pinMode(solenoidValve3, OUTPUT);  
-
-  pinMode(soilSensor1, INPUT);
-  pinMode(soilSensor2, INPUT);
-  pinMode(soilSensor3, INPUT);
-
-  pinMode(waterLvSensor, INPUT); 
-
-  pinMode(waterPump, OUTPUT);
-
   // Start serial communication
-  Serial.begin(115200);
+  Serial.begin(9600);
   
   // Initialize DHT sensor
   dht.begin(); 

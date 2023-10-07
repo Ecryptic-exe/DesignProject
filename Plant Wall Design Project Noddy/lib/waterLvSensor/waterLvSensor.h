@@ -6,7 +6,6 @@
 #include <SoftwareSerial.h>       // Leave the main serial line (USB) for debugging and flashing
 #include <esp_task_wdt.h>
 
-
 class QDY30AIF {
   #define SLAVE_ID        1         // Default slave ID of Growatt
   #define MODBUS_RATE     9600      // Modbus speed, do not change

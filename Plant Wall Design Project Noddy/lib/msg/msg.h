@@ -9,7 +9,9 @@
             HardwareSerial* nano;
 
             bool waterPump = false; 
-            int x_speed = 0;
+            bool SolenoidValue1 = false;
+            bool SolenoidValue2 = false;
+            bool SolenoidValue3 = false;
             int lifting_status = 0;
 
         public:
@@ -17,7 +19,9 @@
 
             bool read();
             bool getWaterPump(); 
-            int getx_speed(); 
+            bool getSolenoidValue1(); 
+            bool getSolenoidValue2();
+            bool getSolenoidValue3();
             int getLiftingStatus();
 
            

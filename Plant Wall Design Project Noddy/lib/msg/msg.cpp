@@ -15,15 +15,25 @@ bool msg::read(){
     }
 
     //decoding 
-    x_speed = (int) nano->read();
+    SolenoidValue1 = (int) nano->read();
+    SolenoidValue2 = (int) nano->read();
+    SolenoidValue3 = (int) nano->read();
     waterPump = (int) nano->read() != 0x00 ? true : false;
     lifting_status = (int) nano->read();
 
     return true;
 }
 
-int msg::getx_speed(){
-    return x_speed;
+bool msg::getSolenoidValue1(){
+    return SolenoidValue1;
+}
+
+bool msg::getSolenoidValue2(){
+    return SolenoidValue2;
+}
+
+bool msg::getSolenoidValue3(){
+    return SolenoidValue3;
 }
 
 int msg::getLiftingStatus(){

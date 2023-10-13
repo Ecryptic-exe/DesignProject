@@ -3,14 +3,17 @@
 #ifndef _WATERPUMP_H
 #define _WATERPUMP_H
 
+
 class waterPump{
     private:
-
+    uint8_t waterPumpPin;
     public:
-    void pumpOpen();
-    void pumpClose();
-    void getPumpStatus();
-
+    waterPump(uint8_t waterPumpPin);
+    void initializePump();
+    void startPump();
+    void stopPump();
 };
 
 #endif
+
+

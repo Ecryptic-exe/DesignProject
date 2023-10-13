@@ -6,7 +6,7 @@ DHTSensor::DHTSensor(int pin, int dhtType, unsigned long intervalMillis)
 
 void DHTSensor::initialize() {
   dht.begin();
-  previousMillis = 0;
+  previousMillis = 0; 
   temperature = 0;
   humidity = 0;
 }
@@ -15,33 +15,37 @@ void DHTSensor::update() {
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
+    
+    // Read temperature
     float newT = dht.readTemperature();
     if (isnan(newT)) {
       Serial.println("Failed to read temperature from DHT sensor!");
-    }
-    else {
+    } else {
       temperature = newT;
-      Serial.print("Temp:");
-      Serial.print(temperature);
-      Serial.print("°C");
-      Serial.print('\n');
+      
+      // Print temperature
+      Serial.print("Temperature: ");
+      Serial.print(temperature); 
+      Serial.println("°C");
     }
+    
+    // Read humidity  
     float newH = dht.readHumidity();
     if (isnan(newH)) {
       Serial.println("Failed to read humidity from DHT sensor!");
-    }
-    else {
+    } else {
       humidity = newH;
-      Serial.print("Humidity:");
+      
+      // Print humidity
+      Serial.print("Humidity: ");
       Serial.print(humidity);
-      Serial.print("%");
-      Serial.print('\n');
+      Serial.println("%");
     }
   }
 }
 
 float DHTSensor::getTemperature() {
-  return temperature;
+  return temperature; 
 }
 
 float DHTSensor::getHumidity() {

@@ -6,6 +6,12 @@
 #include <WiFi.h>
 
 #include "DHT.h"
+#include "flowSensor.h"
+#include "msg.h"
+#include "soilSensor.h"
+#include "solenoidValve.h"
+#include "waterLvSensor.h"
+#include "waterPump.h"
 
 #include "pinmap.h"
 
@@ -13,10 +19,13 @@ DHT dht(DHTPIN, DHTTYPE);
 
 const char* ssid = "Placeholder";
 const char* password = "Placeholder";
+
 const char* mqtt_server = "test.mosquitto.org";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
+
+msg nanoMsg;
 
 void pinSetup(){
   pinMode(flowSensor1, INPUT);
@@ -31,7 +40,8 @@ void pinSetup(){
   pinMode(soilSensor2, INPUT);
   pinMode(soilSensor3, INPUT);
 
-  pinMode(waterLvSensor, INPUT);
+  pinMode(waterLvSensorTx, INPUT);
+  pinMode(waterLvSensorRx, INPUT);
 
   pinMode(waterPump, INPUT);
 };
@@ -91,17 +101,15 @@ void callback(char *topic, byte *payload, unsigned int length) {
 void setup() {
   pinSetup();
 
-  Serial.begin(115200);
   dht.begin();
 
-  client.setServer(mqtt_server, 1883);
-  client.setCallback(callback);
+  //Serial.begin(115200);
+  nanoMsg.init(&Serial);
 }
 
 void loop() {
-  if (!client.connected()) {
-    reconnect();
+  if(!nanoMsg.read()){
+    return;
   }
-  client.loop();
 }
 

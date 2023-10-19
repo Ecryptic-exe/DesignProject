@@ -1,22 +1,17 @@
 #include <Arduino.h>
 
-#ifndef _SOLENOIDVALVE_H
-#define _SOLENOIDVALVE_H
+#ifndef SOLENOID_VALVE_H
+#define SOLENOID_VALVE_H
 
-class solenoidValve{
-    private:
-    uint8_t SOLENOID_PIN1;
-    uint8_t SOLENOID_PIN2;
-    uint8_t SOLENOID_PIN3;
-    public:
-    solenoidValve(uint8_t SOLENOID_PIN1, uint8_t SOLENOID_PIN2, uint8_t SOLENOID_PIN3);
+class SolenoidValve {
+  public:
+    SolenoidValve(uint8_t pin);
     void initializeValue();
-    void valveOpen1();
-    void valveClose1();
-    void valveOpen2();
-    void valveClose2();
-    void valveOpen3();
-    void valveClose3();
+    void valveOpen();
+    void valveClose();
+
+  private:
+    uint8_t _pin;
 };
 
 #endif

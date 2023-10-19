@@ -7,6 +7,10 @@ const byte moist[] = {0x01, 0x03, 0x08, 0x02, 0x92, 0x57, 0xB6};
 const byte temp[] = {0x01, 0x03, 0x08, 0xFF, 0x9B, 0x57, 0xB6};
 const byte EC[] = {0x01, 0x03, 0x08, 0x03, 0xE8, 0x57, 0xB6};
 const byte PH[] = {0x01, 0x03, 0x08, 0x00, 0x38, 0x57, 0xB6};
+//TBC
+const byte Potassium[] = {0x01, 0x03, 0x08, 0x02, 0x92, 0x57, 0xB6};
+const byte Phosphorus[] = {0x01, 0x03, 0x08, 0x02, 0x92, 0x57, 0xB6};
+const byte Nitrogen[] = {0x01, 0x03, 0x08, 0x02, 0x92, 0x57, 0xB6};
 
 SoilSensor::SoilSensor(int RE_pin, int DE_pin, int Rx_pin, int Tx_pin) : _mod(Rx_pin,Tx_pin) {
    _RE = RE_pin;
@@ -30,6 +34,18 @@ byte SoilSensor::readEC() {
 
 byte SoilSensor::readPH() {
    return readSensor(PH);
+}
+
+byte SoilSensor::readPotassium() {
+   return readSensor(Potassium);
+}
+
+byte SoilSensor::readPhosphorus() {
+   return readSensor(Phosphorus);
+}
+
+byte SoilSensor::readNitrogen() {
+   return readSensor(Nitrogen);
 }
 
 byte SoilSensor::readSensor(const byte* command) {

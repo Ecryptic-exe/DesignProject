@@ -6,10 +6,16 @@
 
 class waterPump{
     private:
-    uint8_t waterPumpPin;
+    int waterPumpPin;
+    int pumpPWM;
+    int pwmFreq;
+    float minRate;
+    float maxRate;
+
     public:
-    waterPump(uint8_t waterPumpPin);
+    waterPump(int waterPumpPin);
     void initializePump();
+    void pumpRate(int pumpPWM);
     void startPump();
     void stopPump();
 };

@@ -1,9 +1,16 @@
 #include "waterPump.h"
 
+//Drive through PWM Motor Driver
+
 // Constructor
-waterPump::waterPump(uint8_t waterPumpPin) {
+waterPump::waterPump(int waterPumpPin) {
   this->waterPumpPin = waterPumpPin;
   pinMode(waterPumpPin, OUTPUT);
+
+// Percentage
+  float minRate = 0.00f;
+  float maxRate = 98.00f;
+
 }
 
 // Initialize the pump
@@ -12,14 +19,20 @@ void waterPump::initializePump() {
   stopPump();
 }
 
+void waterPump::pumpRate(int pumpPWM){
+  analogWrite(waterPumpPin, pumpPWM);
+}
+
 // Start the pump
 void waterPump::startPump() {
   // Code to start the pump
-  digitalWrite(waterPumpPin, HIGH);
+  unsigned rate = constrain(rate, minRate, maxRate); // Ensure rate is within the defined range
+  int pwmValue = map(rate, 0, 100, 0, 255); // Map percentage to PWM value
+  pumpRate(pwmValue);
 }
 
 // Stop the pump
 void waterPump::stopPump() {
   // Code to stop the pump
-  digitalWrite(waterPumpPin, LOW);
+  pumpRate(0);
 }

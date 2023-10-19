@@ -5,17 +5,15 @@
 
 class WaterFlowSensor {
 private:
-  int flowRate1;
-  int flowRate2;
-  int flowRate3;
+  int flowRate;
   unsigned long previousMillis;
   unsigned long interval = 1000;
 
 public:
-    WaterFlowSensor(int flowRate1, int flowRate2, int flowRate3,unsigned long intervalMillis);
+    WaterFlowSensor(int flowRate,unsigned long intervalMillis);
     void updateSensorValue();
     void begin();
-    float readFlowRate(int flowRate1, int flowRate2, int flowRate3);
+    float readFlowRate(int flowRate);
 };
 
 #endif

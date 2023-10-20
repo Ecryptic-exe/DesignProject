@@ -5,7 +5,7 @@ SolenoidValve::SolenoidValve(uint8_t pin) {
   pinMode(pin, OUTPUT);
 }
 
-void SolenoidValve::initializeValue() {
+void SolenoidValve::initializeValve() {
   valveClose();
 }
 

@@ -4,14 +4,14 @@
 #define SOLENOID_VALVE_H
 
 class SolenoidValve {
-  private:
-    uint8_t pin; // #178900
-    
   public:
     SolenoidValve(uint8_t pin);
-    void initializeValue();
+    void initializeValve();
     void valveOpen();
     void valveClose();
+
+  private:
+    uint8_t pin;
 };
 
 #endif

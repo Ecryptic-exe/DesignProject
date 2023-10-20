@@ -31,7 +31,7 @@ WaterFlowSensor FlowSensor1(flowSensor1, 1000);
 WaterFlowSensor FlowSensor2(flowSensor2, 1000);
 WaterFlowSensor FlowSensor3(flowSensor3, 1000);
 
-waterPump pump(_waterPump);
+waterPump pump(waterPumpPinA, waterPumpPinB);
 
 void pinSetup(){
 

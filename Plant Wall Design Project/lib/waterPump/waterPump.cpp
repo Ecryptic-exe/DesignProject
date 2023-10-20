@@ -1,34 +1,29 @@
 #include "waterPump.h"
 
-//Drive through PWM Motor Driver
-
-// Constructor
-waterPump::waterPump(int waterPumpPin) {
-  this->waterPumpPin = waterPumpPin;
-  pinMode(waterPumpPin, OUTPUT);
-
-// Percentage
-  float minRate = 0.00f;
-  float maxRate = 98.00f;
-
+waterPump::waterPump(int waterPumpPinA, int waterPumpPinB) {
+  this->waterPumpPinA = waterPumpPinA;
+  this->waterPumpPinB = waterPumpPinB;
+  pinMode(waterPumpPinA, OUTPUT);
+  pinMode(waterPumpPinB, OUTPUT);
 }
 
 // Initialize the pump
+// Currently at 1k Freq, to be done later
 void waterPump::initializePump() {
   // Code to initialize the pump
+  // ledcSetup(pwmChannelA, pwmFreq, PWMResolution);
+  // ledcSetup(pwmChannelB, pwmFreq, PWMResolution);
+  // ledcAttachPin(waterPumpPinA, pwmChannelA);
+  // ledcAttachPin(waterPumpPinB, pwmChannelB);
   stopPump();
 }
 
-void waterPump::pumpRate(int pumpPWM){
-  analogWrite(waterPumpPin, pumpPWM);
-}
+void waterPump::pumpRate(int pwmValue){
+  pwmValue = constrain(pwmValue, minRate, maxRate); // Ensure rate is within the defined range
+  pwmValue = map(pwmValue, minRate, maxRate, 0, (255*maxRate/100)); // Map percentage to PWM value
 
-// Start the pump
-void waterPump::startPump() {
-  // Code to start the pump
-  unsigned rate = constrain(rate, minRate, maxRate); // Ensure rate is within the defined range
-  int pwmValue = map(rate, 0, 100, 0, 255); // Map percentage to PWM value
-  pumpRate(pwmValue);
+  analogWrite(waterPumpPinA, pwmValue);
+  analogWrite(waterPumpPinB, minRate); // Pump Pin B should be 0
 }
 
 // Stop the pump

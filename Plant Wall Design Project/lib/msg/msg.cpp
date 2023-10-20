@@ -3,7 +3,7 @@
 void msg::init(HardwareSerial* serial){ 
     nano = serial;
 
-    nano->begin(115200);
+    nano->begin(9600);
 }
 
 bool msg::read(){

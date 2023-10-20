@@ -1,7 +1,7 @@
 #include "WaterLvSensor.h"
 
 WaterLevelSensor::WaterLevelSensor(int _analogPin, double _voltageToLevelFactor) {
-  analogPin = _analogPin;
+  this->analogPin = analogPin;
   voltageToLevelFactor = _voltageToLevelFactor;
   pinMode(analogPin, INPUT);
 }

@@ -1,8 +1,8 @@
 #include "SolenoidValve.h"
 
 SolenoidValve::SolenoidValve(uint8_t pin) {
-  _pin = pin;
-  pinMode(_pin, OUTPUT);
+  this->pin = pin;
+  pinMode(pin, OUTPUT);
 }
 
 void SolenoidValve::initializeValue() {
@@ -10,9 +10,9 @@ void SolenoidValve::initializeValue() {
 }
 
 void SolenoidValve::valveOpen() {
-  digitalWrite(_pin, HIGH);
+  digitalWrite(pin, HIGH);
 }
 
 void SolenoidValve::valveClose() {
-  digitalWrite(_pin, LOW);
+  digitalWrite(pin, LOW);
 }

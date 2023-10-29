@@ -1,107 +1,118 @@
 #include <Arduino.h>
 #include <Adafruit_Sensor.h>
-#include <PubSubClient.h>
 #include <Adafruit_I2CDevice.h>
 #include <SPI.h>
-#include <WiFi.h>
 
 #include "DHT.h"
+#include "FlowSensor.h"
+#include "msg.h"
+#include "soilSensor.h"
+#include "solenoidValve.h"
+//#include "waterLvSensor.h"
+#include "UltrasonicSensor.h"
+#include "waterPump.h"
 
 #include "pinmap.h"
 
-DHT dht(DHTPIN, DHTTYPE);
+// flowSensor Type
+#define type YFB1
+FlowSensor flowSensor(type, FlowSensor1);
+unsigned long timebefore = 0; // Same type as millis()
+//if use ESP8266 and ESP32
+void IRAM_ATTR count()
+{
+  flowSensor.count();
+}
 
-const char* ssid = "Placeholder";
-const char* password = "Placeholder";
-const char* mqtt_server = "test.mosquitto.org";
+// msg nanoMsg;
 
-WiFiClient espClient;
-PubSubClient client(espClient);
+// SoilSensor soilSensor1(1,2,soilSensor1Rx,soilSensor1Tx); // RE pin:1 DE pin:2 Rx pin:A1 Tx pin:A2
+// SoilSensor soilSensor2(3,4,soilSensor2Rx,soilSensor2Tx); // RE pin:3 DE pin:4 Rx pin:A3 Tx pin:A4
+// SoilSensor soilSensor3(5,6,soilSensor3Rx,soilSensor3Tx); // RE pin:5 DE pin:6 Rx pin:A5 Tx pin:A6
+
+SolenoidValve Valve1(solenoidValve1);
+SolenoidValve Valve2(solenoidValve2);
+SolenoidValve Valve3(solenoidValve3);
+
+waterPump pump(waterPumpPinA, waterPumpPinB);
+UltrasonicSensor waterLevelSensor(trigPin, echoPin);
 
 void pinSetup(){
-  pinMode(flowSensor1, INPUT);
-  pinMode(flowSensor2, INPUT);
-  pinMode(flowSensor3, INPUT);
 
-  pinMode(solenoidValve1, INPUT);
-  pinMode(solenoidValve2, INPUT);
-  pinMode(solenoidValve3, INPUT);
-
-  pinMode(soilSensor1, INPUT);
-  pinMode(soilSensor2, INPUT);
-  pinMode(soilSensor3, INPUT);
-
-  pinMode(waterLvSensor, INPUT);
-
-  pinMode(waterPump, INPUT);
 };
 
-void setup_wifi() {
-  delay(10);
-  // We start by connecting to a WiFi network
-  Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
+// void readSoilSensor(){  // Sample placeholder
+//     byte moist1 = soilSensor1.readMoist();
+//     byte moist2 = soilSensor2.readMoist();
+//     byte moist3 = soilSensor3.readMoist();
 
-  WiFi.begin(ssid, password);
+//     Serial.print("Moisture Sensor #1: ");
+//     Serial.println(moist1);
 
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
+//     Serial.print("Moisture Sensor #2: ");
+//     Serial.println(moist2);
 
-  Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
+//     Serial.print("Moisture Sensor #3: ");
+//     Serial.println(moist3);
+// };
+
+void valveInit(){
+  Valve1.initializeValve();
+  // Valve2.initializeValve();
+  // Valve3.initializeValve();
 }
 
-void reconnect() {
-  // Loop until we're reconnected
-  while (!client.connected()) {
-    Serial.print("Attempting MQTT connection...");
-    // Attempt to connect
-    if (client.connect("ESP32Client")) {
-      Serial.println("connected");
-      // Subscribe
-      client.subscribe("esp32/output");
-    } else {
-      Serial.print("failed, rc=");
-      Serial.print(client.state());
-      Serial.println(" try again in 5 seconds");
-      // Wait 5 seconds before retrying
-      delay(5000);
-    }
-  }
+void testValve(){
+  Valve1.valveClose();
+  // Valve2.valveClose();
+  // Valve3.valveClose();
+  delay(3000);
+  Valve1.valveOpen();
+  // Valve2.valveOpen();
+  // Valve3.valveOpen();
+  delay(3000);
 }
-
-void callback(char *topic, byte *payload, unsigned int length) {
-    Serial.print("Message arrived in topic: ");
-    Serial.println(topic);
-    Serial.print("Message:");
-    for (int i = 0; i < length; i++) {
-        Serial.print((char) payload[i]);
-    }
-    Serial.println();
-    Serial.println("-----------------------");
-}
-
 /////////////////////////////////////////
 
 void setup() {
+
   pinSetup();
 
-  Serial.begin(115200);
-  dht.begin();
+  flowSensor.begin(count);// Configure flowsensor
 
-  client.setServer(mqtt_server, 1883);
-  client.setCallback(callback);
+  waterLevelSensor.begin();// Configure ultrasonic sensor
+
+  valveInit(); // Configure solenoid valve
+
+  //Serial.begin(9600);
+  //nanoMsg.init(&Serial);
+
+  // pump.initializePump(); // Initialize the pump
+
 }
 
 void loop() {
-  if (!client.connected()) {
-    reconnect();
-  }
-  client.loop();
+
+  //flowsenor
+	if (millis() - timebefore >= 1000)
+	{
+		flowSensor.read();
+		Serial.print("Flow rate (L/minute) : ");
+		Serial.println(flowSensor.getFlowRate_m());
+		timebefore = millis();
+	}
+
+  //ultrasonic
+  waterLevelSensor.update();
+
+  //waterPump
+  pump.pumpRate(90);
+
+  //solenoid valve
+  testValve();
+
+  // if(!nanoMsg.read()){
+  //   return; 
+  // }
 }
 

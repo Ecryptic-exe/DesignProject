@@ -1,28 +1,24 @@
-#include <Arduino.h>
+#ifndef SoilSensor_h
+#define SoilSensor_h
 
-#ifndef _SOILSENSOR_H
-#define _SOILSENSOR_H
+#include "Arduino.h"
+#include <SoftwareSerial.h>
 
-class soilSensor{
-    private:
-        float temperature;
-        float humidity;
-        float PHValue;
-        float nitrogen;
-        float phosphorus;
-        float potassium;
+class SoilSensor {
 
-        unsigned long previousMillis;
-        unsigned long interval;
+  private:
+    void printHexByte(byte b);
+    byte readSensor(const byte* command);
+    SoftwareSerial _mod;
+    int _RE;
+    int _DE;
 
-    public:
-        soilSensor(int pin, unsigned long intervalMillis);
-        float getTemperature();
-        float getHumidity();
-        float getPHValue();
-        float getNitrogen();
-        float getPhosphorus();
-        float getPotassium();
+  public:
+    SoilSensor(int RE_pin, int DE_pin, int Rx_pin, int Tx_pin);
+    byte readMoistTemp();
+    byte readEC();
+    byte readPH();
+    byte readNKP();
 };
 
 #endif

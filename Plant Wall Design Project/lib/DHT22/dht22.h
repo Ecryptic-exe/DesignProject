@@ -7,7 +7,7 @@
 class DHTSensor {
 private:
   unsigned long previousMillis;
-  unsigned long interval;
+  unsigned long interval = 1000;
   float temperature;
   float humidity;
   DHT dht;

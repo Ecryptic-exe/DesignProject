@@ -1,17 +1,17 @@
 #include <Arduino.h>
 
-#ifndef _SOLENOIDVALVE_H
-#define _SOLENOIDVALVE_H
+#ifndef SOLENOID_VALVE_H
+#define SOLENOID_VALVE_H
 
-class solenoidValve{
-    private:
-    bool valveIsOpen;
-
-    public:
+class SolenoidValve {
+  public:
+    SolenoidValve(uint8_t pin);
+    void initializeValve();
     void valveOpen();
     void valveClose();
-    void getValveStatus();
 
+  private:
+    uint8_t pin;
 };
 
 #endif

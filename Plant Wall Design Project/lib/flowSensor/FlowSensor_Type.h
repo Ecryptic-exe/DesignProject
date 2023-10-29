@@ -1,0 +1,16 @@
+// Sensor Type
+// -----------------------
+// YF
+#define YFS201	450
+#define YFB1	660
+#define YFS401	5880
+// OF
+#define OF10ZAT	400
+#define OF10ZZT	400
+#define OF05ZAT	2174
+#define OF05ZZT	2174
+//------------------------
+
+/**
+ * edit this file and create pull request if you want to add new sensor
+ */

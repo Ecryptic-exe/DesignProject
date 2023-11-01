@@ -1,66 +1,41 @@
+#include "Arduino.h"
 #include "FlowSensor.h"
 
-FlowSensor::FlowSensor(uint16_t type ,uint8_t pin)
+FlowSensor* flowSensorInstance;
+
+FlowSensor::FlowSensor(int pin)
 {
-	this->_pin = pin;
-	this->_pulse1liter = type;
+  pinMode(pin, INPUT);
+  digitalWrite(pin, HIGH); // Optional Internal Pull-Up
+  _flowsensor = pin;
+  flowSensorInstance = this;
 }
 
-void FlowSensor::begin(void (*userFunc)(void))
+void FlowSensor::flow()
 {
-	pinMode(this->_pin, INPUT);
-	digitalWrite(this->_pin, INPUT_PULLUP); // Optional Internal Pull-Up
-	attachInterrupt(digitalPinToInterrupt(this->_pin), userFunc, RISING); // For better compatibility with any board, for example Arduino Leonardo Boards
+  flowSensorInstance->_flow_frequency++;
 }
 
-void FlowSensor::count()
+void FlowSensor::setup()
 {
-	this->_pulse++;
+  Serial.begin(9600);
+  attachInterrupt(digitalPinToInterrupt(_flowsensor), flow, RISING); // Setup Interrupt
+  sei(); // Enable interrupts
+  _currentTime = millis();
+  _cloopTime = _currentTime;
 }
 
-void FlowSensor::read(long calibration)
+void FlowSensor::loop()
 {
-	this->_flowratesecound = (this->_pulse / (this->_pulse1liter + calibration)) / ((millis() - this->_timebefore) / 1000);
-	this->_volume += (this->_pulse / (this->_pulse1liter + calibration));
-	this->_totalpulse += this->_pulse;
-	this->_pulse = 0;
-	this->_timebefore = millis();
-}
-
-unsigned long FlowSensor::getPulse()
-{
-	return this->_totalpulse;
-}
-
-void FlowSensor::resetPulse()
-{
-	this->_pulse=0;
-	this->_totalpulse=0;
-}
-
-float FlowSensor::getFlowRate_h()
-{
-	this->_flowratehour = this->_flowratesecound * 3600;
-	return this->_flowratehour;
-}
-
-float FlowSensor::getFlowRate_m()
-{
-	this->_flowrateminute = this->_flowratesecound * 60;
-	return this->_flowrateminute;
-}
-
-float FlowSensor::getFlowRate_s()
-{
-	return this->_flowratesecound;
-}
-
-float FlowSensor::getVolume()
-{
-	return this->_volume;
-}
-
-void FlowSensor::resetVolume()
-{
-	this->_volume = 0;
+  _currentTime = millis();
+  // Every second, calculate and print litres/minute
+  if(_currentTime >= (_cloopTime + 1000))
+  {
+    _cloopTime = _currentTime; // Updates cloopTime
+    // Pulse frequency (Hz) = 11Q, Q is flow rate in L/min.
+    _l_min = (_flow_frequency / 11.0); // Pulse frequency / 11Q = flowrate in L/min
+    _flow_frequency = 0; // Reset Counter
+    Serial.print(_l_min, DEC); // Print litres/minute
+    Serial.println(" L/min");
+  }
 }

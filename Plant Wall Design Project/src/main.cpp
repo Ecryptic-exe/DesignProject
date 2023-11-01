@@ -14,15 +14,8 @@
 
 #include "pinmap.h"
 
-// flowSensor Type
-#define type YFB1
-FlowSensor flowSensor(type, FlowSensor1);
-unsigned long timebefore = 0; // Same type as millis()
-//if use ESP8266 and ESP32
-void IRAM_ATTR count()
-{
-  flowSensor.count();
-}
+FlowSensor flowSensor(FlowSensor1);
+
 
 // msg nanoMsg;
 
@@ -75,16 +68,16 @@ void testValve(){
 /////////////////////////////////////////
 
 void setup() {
+  Serial.begin(9600);
 
+  flowSensor.setup();
   pinSetup();
 
-  flowSensor.begin(count);// Configure flowsensor
+  // waterLevelSensor.begin();// Configure ultrasonic sensor
 
-  waterLevelSensor.begin();// Configure ultrasonic sensor
+  // valveInit(); // Configure solenoid valve
 
-  valveInit(); // Configure solenoid valve
 
-  //Serial.begin(9600);
   //nanoMsg.init(&Serial);
 
   // pump.initializePump(); // Initialize the pump
@@ -94,22 +87,16 @@ void setup() {
 void loop() {
 
   //flowsenor
-	if (millis() - timebefore >= 1000)
-	{
-		flowSensor.read();
-		Serial.print("Flow rate (L/minute) : ");
-		Serial.println(flowSensor.getFlowRate_m());
-		timebefore = millis();
-	}
+  flowSensor.loop();
 
   //ultrasonic
-  waterLevelSensor.update();
+  // waterLevelSensor.update();
 
   //waterPump
-  pump.pumpRate(90);
+  // pump.pumpRate(90);
 
   //solenoid valve
-  testValve();
+  // testValve();
 
   // if(!nanoMsg.read()){
   //   return; 

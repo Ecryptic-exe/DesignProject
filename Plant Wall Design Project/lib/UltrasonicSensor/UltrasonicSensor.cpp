@@ -15,7 +15,6 @@ void UltrasonicSensor::update() {
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
-    long t = 0, h = 0, hp = 0; // duration is t, height is h, height percentage is hp
     
     // Transmitting pulse
     digitalWrite(trigPin, LOW);
@@ -28,26 +27,41 @@ void UltrasonicSensor::update() {
     t = pulseIn(echoPin, HIGH);
 
     // Calculating distance
-    h = t * 0.034 / 2; // h=t/58
+    h = t*0.017; 
 
-    h = h - fullTankDistance;  // offset correction
-    h = emptyTankDistance - h;  // water height, 0 - 50 cm
+    h = h - fullTankDistance;  //5cm
+    h = emptyTankDistance - h - fullTankDistance;  //20cm
 
-    // distance in %, 0-100 %
-    hp = h/(emptyTankDistance-fullTankDistance)*100;
+    // // distance in %, 0-100 %
+    total = emptyTankDistance-fullTankDistance;
+    hp = h/total*100;
 
     // Sending to computer
-    // Serial.print(hp);
+    // Serial.print(h);
     // Serial.print(" cm");
-    Serial.print(hp);
-    Serial.print("%");
-    Serial.print("\n");
 
-    // Checking water level
+    // // Checking water level
     if (hp >= 100) {
+      hp = 100;
+      Serial.print(hp);
+      Serial.print("%");
       Serial.println("Full");
-    } else if (hp <= 15) {
+    } 
+    else if (hp > 15 && hp < 100) {
+      Serial.print(hp);
+      Serial.print("%");
+      Serial.println("");
+    }
+    else if (hp <= 15 && hp > 0) {
+      Serial.print(hp);
+      Serial.print("%");
       Serial.println("Almost Empty, need to add water");
+    }
+    else if (hp <= 0) {
+      hp = 0;
+      Serial.print(hp);
+      Serial.print("%");
+      Serial.println("Empty, have to add water");
     }
   }
 }

@@ -8,11 +8,12 @@ const byte EC[] = {0x01, 0x03, 0x00, 0x15, 0x00, 0x01, 0x95, 0xCE};
 const byte PH[] = {0x01, 0x03, 0x00, 0x06, 0x00, 0x01, 0x64, 0x0B};
 const byte NKP[] = {0x01, 0x03, 0x00, 0x1E, 0x00, 0x01, 0xE4, 0x0C};
 
-SoilSensor::SoilSensor(int RE_pin, int DE_pin, int Rx_pin, int Tx_pin) : _mod(Rx_pin,Tx_pin) {
-   _RE = RE_pin;
-   _DE = DE_pin;
-   pinMode(_RE, OUTPUT);
-   pinMode(_DE, OUTPUT);
+// SoilSensor::SoilSensor(int RE_pin, int DE_pin, int Rx_pin, int Tx_pin) : _mod(Rx_pin,Tx_pin) {
+SoilSensor::SoilSensor(int Rx_pin, int Tx_pin) : _mod(Rx_pin,Tx_pin) {
+   // _RE = RE_pin;
+   // _DE = DE_pin;
+   // pinMode(_RE, OUTPUT);
+   // pinMode(_DE, OUTPUT);
    _mod.begin(9600);
 }
 

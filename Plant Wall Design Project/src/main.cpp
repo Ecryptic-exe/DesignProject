@@ -19,16 +19,16 @@ FlowSensor flowSensor(FlowSensor1);
 
 // msg nanoMsg;
 
-// SoilSensor soilSensor1(1,2,soilSensor1Rx,soilSensor1Tx); // RE pin:1 DE pin:2 Rx pin:A1 Tx pin:A2
-// SoilSensor soilSensor2(3,4,soilSensor2Rx,soilSensor2Tx); // RE pin:3 DE pin:4 Rx pin:A3 Tx pin:A4
-// SoilSensor soilSensor3(5,6,soilSensor3Rx,soilSensor3Tx); // RE pin:5 DE pin:6 Rx pin:A5 Tx pin:A6
+// SoilSensor soilSensor1(soilSensor1Rx,soilSensor1Tx); // RE pin:1 DE pin:2 Rx pin:A1 Tx pin:A2
+// SoilSensor soilSensor2(soilSensor2Rx,soilSensor2Tx); // RE pin:3 DE pin:4 Rx pin:A3 Tx pin:A4
+// SoilSensor soilSensor3(soilSensor3Rx,soilSensor3Tx); // RE pin:5 DE pin:6 Rx pin:A5 Tx pin:A6
 
-SolenoidValve Valve1(solenoidValve1);
-SolenoidValve Valve2(solenoidValve2);
-SolenoidValve Valve3(solenoidValve3);
+// SolenoidValve Valve1(solenoidValve1);
+// SolenoidValve Valve2(solenoidValve2);
+// SolenoidValve Valve3(solenoidValve3);
 
-waterPump pump(waterPumpPinA, waterPumpPinB);
-UltrasonicSensor waterLevelSensor(trigPin, echoPin);
+// waterPump pump(waterPumpPinA, waterPumpPinB);
+// UltrasonicSensor waterLevelSensor(trigPin, echoPin);
 
 void pinSetup(){
 
@@ -50,7 +50,7 @@ void pinSetup(){
 // };
 
 void valveInit(){
-  Valve1.initializeValve();
+  // Valve1.initializeValve();
   // Valve2.initializeValve();
   // Valve3.initializeValve();
 }

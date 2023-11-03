@@ -14,7 +14,7 @@ class SoilSensor {
     int _DE;
 
   public:
-    SoilSensor(int RE_pin, int DE_pin, int Rx_pin, int Tx_pin);
+    SoilSensor(int Rx_pin, int Tx_pin);
     byte readMoistTemp();
     byte readEC();
     byte readPH();

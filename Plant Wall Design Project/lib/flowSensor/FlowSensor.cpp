@@ -6,7 +6,8 @@ volatile long FlowSensor::pulse = 0;
 FlowSensor::FlowSensor(int pin) {
   sensorPin = pin; // set the pin number
   lastTime = 0; // initialize the last time
-  mL_min = 0; // initialize the mL_min
+  flowRate = 0; // initialize the flowRate
+  totalMilliLitres = 0;
 }
 
 void FlowSensor::begin() {
@@ -14,16 +15,28 @@ void FlowSensor::begin() {
   attachInterrupt(digitalPinToInterrupt(sensorPin), FlowSensor::increase, RISING); // attach the interrupt handler
 }
 
-void FlowSensor::getmL_min() {
-  if (millis() - lastTime > 500) { // update the mL_min every half second
-    mL_min = (pulse * 1000 / 11); // (Pulse frequency x 1000 mL) / 11Q = flowrate in mL/min
-    //mL_min = (pulse * 60 / 11); // (Pulse frequency x 60 min) / 11Q = flowrate in L/hour
-    Serial.print(mL_min);
+void FlowSensor::getflowRate() {
+  if (millis() - lastTime > 1000) { // update the flowRate every half second
+    flowRate = (pulse * 1000 / 11); // (Pulse frequency x 1000 mL) / 11Q = flowrate in mL/min
+    //flowRate = (pulse * 60 / 11); // (Pulse frequency x 60 min) / 11Q = flowrate in L/hour
+    Serial.print(flowRate);
     Serial.println(" mL/min   ");
     //Serial.print(" L/h    ");
+    lastTime = millis(); // update the last time
+
+    totalMilliLitres += flowRate;
+    // Print the cumulative total of litres flowed since starting
+    Serial.print("Output Liquid Quantity: ");        
+    Serial.print(totalMilliLitres);
+    Serial.println("mL");     
+        
+    if (totalMilliLitres > 40)
+    {
+      Serial.println("valve low");
+    }
 
     pulse = 0; // reset the pulse
-    lastTime = millis(); // update the last time
+    
   }
 }
 

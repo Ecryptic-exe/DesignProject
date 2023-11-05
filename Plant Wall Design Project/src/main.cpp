@@ -87,7 +87,7 @@ void setup() {
 void loop() {
 
   //flowsenor
-  flowSensor.getmL_min();
+  flowSensor.getflowRate();
 
   //ultrasonic
   // waterLevelSensor.update();

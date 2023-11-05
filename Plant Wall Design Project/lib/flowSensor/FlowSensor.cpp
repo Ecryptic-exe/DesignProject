@@ -16,28 +16,34 @@ void FlowSensor::begin() {
 }
 
 void FlowSensor::getflowRate() {
-  if (millis() - lastTime > 1000) { // update the flowRate every half second
-    flowRate = (pulse * 1000 / 11); // (Pulse frequency x 1000 mL) / 11Q = flowrate in mL/min
-    //flowRate = (pulse * 60 / 11); // (Pulse frequency x 60 min) / 11Q = flowrate in L/hour
-    Serial.print(flowRate);
-    Serial.println(" mL/min   ");
-    //Serial.print(" L/h    ");
-    lastTime = millis(); // update the last time
-
-    totalMilliLitres += flowRate;
-    // Print the cumulative total of litres flowed since starting
-    Serial.print("Output Liquid Quantity: ");        
-    Serial.print(totalMilliLitres);
-    Serial.println("mL");     
-        
-    if (totalMilliLitres > 40)
+  if (totalMilliLitres <= 180)
     {
+      if (millis() - lastTime > 1000) { // update the flowRate every half second
+        Serial.println("valve high");
+        flowRate = (pulse * 1000 / 11); // (Pulse frequency x 1000 mL) / 11Q = flowrate in mL/min
+        //flowRate = (pulse * 60 / 11); // (Pulse frequency x 60 min) / 11Q = flowrate in L/hour
+        Serial.print(flowRate);
+        Serial.println(" mL/min   ");
+        //Serial.print(" L/h    ");
+        lastTime = millis(); // update the last time
+
+        totalMilliLitres += flowRate;
+        // Print the cumulative total of litres flowed since starting
+        Serial.print("Output Liquid Quantity: ");        
+        Serial.print(totalMilliLitres);
+        Serial.println("mL");     
+
+        pulse = 0; // reset the pulse
+      }
+    }
+    else if (totalMilliLitres > 180)
+    {
+      lastTime = 0;
+      flowRate = 0;
+      totalMilliLitres = 0;
+      pulse = 0;
       Serial.println("valve low");
     }
-
-    pulse = 0; // reset the pulse
-    
-  }
 }
 
 void FlowSensor::increase() {

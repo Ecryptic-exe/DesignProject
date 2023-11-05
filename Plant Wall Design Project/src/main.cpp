@@ -23,7 +23,7 @@ FlowSensor flowSensor(FlowSensor1);
 // SoilSensor soilSensor2(soilSensor2Rx,soilSensor2Tx); // RE pin:3 DE pin:4 Rx pin:A3 Tx pin:A4
 // SoilSensor soilSensor3(soilSensor3Rx,soilSensor3Tx); // RE pin:5 DE pin:6 Rx pin:A5 Tx pin:A6
 
-// SolenoidValve Valve1(solenoidValve1);
+SolenoidValve Valve1(solenoidValve1);
 // SolenoidValve Valve2(solenoidValve2);
 // SolenoidValve Valve3(solenoidValve3);
 
@@ -70,7 +70,7 @@ void testValve(){
 void setup() {
   Serial.begin(9600);
 
-  flowSensor.setup();
+  flowSensor.begin();
   pinSetup();
 
   // waterLevelSensor.begin();// Configure ultrasonic sensor
@@ -87,7 +87,7 @@ void setup() {
 void loop() {
 
   //flowsenor
-  flowSensor.loop();
+  flowSensor.getmL_min();
 
   //ultrasonic
   // waterLevelSensor.update();

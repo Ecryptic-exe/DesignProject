@@ -27,6 +27,7 @@ void FlowSensor::getflowRate() {
         //Serial.print(" L/h    ");
         lastTime = millis(); // update the last time
 
+        //calculate volume
         totalMilliLitres += flowRate;
         // Print the cumulative total of litres flowed since starting
         Serial.print("Output Liquid Quantity: ");        

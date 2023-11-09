@@ -1,0 +1,26 @@
+#include <SoftwareSerial.h>
+#include <Arduino.h>
+
+//SoftwareSerial mySerial(15, 2);  // RX, TX
+
+void setup() {
+  Serial.begin(9600);
+  Serial2.begin(9600); // NPK communicates at 4800 bps
+}
+
+void loop()
+{
+  uint8_t queryData[] {0x01,0x03,0x00,0x12,0x00,0x02,0x64, 0x0e};
+  uint8_t receivedData[9];
+  String abc;
+  Serial2.write(queryData,sizeof(queryData)); // send query data to NPK
+  Serial2.readBytes(receivedData, sizeof(receivedData));  // Read the received data into the receivedData array
+
+  // Print the received data in HEX format
+for (int i = 0; i < sizeof(receivedData); i++) {
+      Serial.print(receivedData[i], HEX);
+      Serial.print(" ");
+    }
+    Serial.println();
+  
+}

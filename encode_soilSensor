@@ -1,0 +1,29 @@
+#include <Arduino.h>
+
+void setup() {
+  Serial.begin(9600);
+  Serial2.begin(9600); // NPK communicates at 4800 bps
+}
+
+void loop() {
+  byte temp[] = {0x01,0x03,0x00,0x12,0x00,0x02,0x64,0x0e}; //temp
+  byte receivedData[9];
+
+  Serial2.write(temp, sizeof(temp));  // Send the query data to the NPK sensor
+  delay(1000);  // Wait for 1 second
+
+  if (Serial2.available() >= sizeof(receivedData)) {  // Check if there are enough bytes available to read
+    Serial2.readBytes(receivedData, sizeof(receivedData));  // Read the received data into the receivedData array
+
+    // Parse and print the received data in decimal format
+    // unsigned int soilHumidity = (receivedData[3] << 8) | receivedData[4];
+    unsigned int soilTemperature = (receivedData[5] << 8) | receivedData[6];
+
+
+    // Serial.print("Soil Humidity: ");
+    // Serial.println((float)soilHumidity / 10.0);
+    Serial.print("Soil Temperature: ");
+    Serial.println((float)soilTemperature / 10.0);
+
+  }
+}

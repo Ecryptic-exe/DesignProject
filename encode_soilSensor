@@ -17,23 +17,10 @@ void temperture() {
 
   // Parse and print the received data in decimal format
   unsigned int soilTemperature = (receivedData[5] << 8) | receivedData[6];
+  unsigned int soilHumidity = (receivedData[3] << 8) | receivedData[4];
 
   Serial.print("Soil Temperature: ");
   Serial.println((float)soilTemperature / 10.0);
-}
-
-void humidity() {
-  byte cond[] = {0x01,0x03,0x00,0x12,0x00,0x01,0x24,0x0f}; 
-  byte receivedData1[7];
-
-  Serial2.write(cond, sizeof(cond));  // Send the query data to the NPK sensor
-  delay(1000);  // Wait for 1 second
-
-  Serial2.readBytes(receivedData1, sizeof(receivedData1));  // Read the received data into the receivedData array
-
-  // Parse and print the received data in decimal format
-  unsigned int soilHumidity = (receivedData1[3] << 8) | receivedData1[4];
-
   Serial.print("Soil Humidity: ");
   Serial.println((float)soilHumidity / 10.0);
 }
@@ -67,12 +54,12 @@ void pH() {
   unsigned int soilpH = (receivedData3[3] << 8) | receivedData3[4];
 
   Serial.print("Soil pH: ");
-  Serial.println((float)soilpH / 10.0);
+  Serial.println((float)soilpH / 100.0);
 }
 
 void nitrogen() {
-  byte nitrogen[] = {0x01,0x03,0x00,0x1E,0x00,0x01,0xE4,0x0c}; 
-  byte receivedData4[7];
+  byte nitrogen[] = {0x01,0x03,0x00,0x1E,0x00,0x03,0x65,0xcd}; 
+  byte receivedData4[11];
 
   Serial2.write(nitrogen, sizeof(nitrogen));  // Send the query data to the NPK sensor
   delay(1000);  // Wait for 1 second
@@ -81,49 +68,20 @@ void nitrogen() {
 
   // Parse and print the received data in decimal format
   unsigned int soilNitrogen = (receivedData4[3] << 8) | receivedData4[4];
+  unsigned int soilPhosphorus = (receivedData4[5] << 8) | receivedData4[6];
+  unsigned int soilPotassium = (receivedData4[7] << 8) | receivedData4[8];
 
   Serial.print("Soil Nitrogen: ");
   Serial.println((float)soilNitrogen / 10.0);
-}
-
-void phosphorus() {
-  byte phosphorus[] = {0x01,0x03,0x00,0x1f,0x00,0x01,0xb5,0xcc}; 
-  byte receivedData5[7];
-
-  Serial2.write(phosphorus, sizeof(phosphorus));  // Send the query data to the NPK sensor
-  delay(1000);  // Wait for 1 second
-
-  Serial2.readBytes(receivedData5, sizeof(receivedData5));  // Read the received data into the receivedData array
-
-  // Parse and print the received data in decimal format
-  unsigned int soilPhosphorus = (receivedData5[3] << 8) | receivedData5[4];
-
   Serial.print("Soil Phosphorus: ");
   Serial.println((float)soilPhosphorus / 10.0);
-}
-
-void potassium() {
-  byte potassium[] = {0x01,0x03,0x00,0x20,0x00,0x01,0x85,0xc0}; 
-  byte receivedData6[7];
-
-  Serial2.write(potassium, sizeof(potassium));  // Send the query data to the NPK sensor
-  delay(1000);  // Wait for 1 second
-
-  Serial2.readBytes(receivedData6, sizeof(receivedData6));  // Read the received data into the receivedData array
-
-  // Parse and print the received data in decimal format
-  unsigned int soilPotassium = (receivedData6[3] << 8) | receivedData6[4];
-
   Serial.print("Soil Potassium: ");
   Serial.println((float)soilPotassium / 10.0);
 }
 
 void loop() {
   temperture();
-  humidity();
   conductivity();
   pH();
   nitrogen();
-  phosphorus();
-  potassium();
 }

@@ -90,30 +90,32 @@ void setup() {
 void loop() {
 
   //soilSensor
-  float temperature = soilSensor.getTemperature(); // Use the soilSensor object
-  float humidity = soilSensor.getHumidity(); // Use the soilSensor object
-  float conductivity = soilSensor.getConductivity(); // Use the soilSensor object
-  float pH = soilSensor.getpH(); // Use the soilSensor object
-  float nitrogen = soilSensor.getNitrogen(); // Use the soilSensor object
-  float phosphorus = soilSensor.getPhosphorus(); // Use the soilSensor object
-  float potassium = soilSensor.getPotassium(); // Use the soilSensor object
+  if (millis() - soilSensor.getLastQueryTime() >= 1000) {
+    // If yes, get the soil parameters
+    float temperature = soilSensor.getTemperature(); // Use the soilSensor object
+    float humidity = soilSensor.getHumidity(); // Use the soilSensor object
+    float conductivity = soilSensor.getConductivity(); // Use the soilSensor object
+    float pH = soilSensor.getpH(); // Use the soilSensor object
+    float nitrogen = soilSensor.getNitrogen(); // Use the soilSensor object
+    float phosphorus = soilSensor.getPhosphorus(); // Use the soilSensor object
+    float potassium = soilSensor.getPotassium(); // Use the soilSensor object
 
-  Serial.print("Soil Temperature: ");
-  Serial.println(temperature);
-  Serial.print("Soil Humidity: ");
-  Serial.println(humidity);
-  Serial.print("Soil Conductivity: ");
-  Serial.println(conductivity);
-  Serial.print("Soil pH: ");
-  Serial.println(pH);
-  Serial.print("Soil Nitrogen: ");
-  Serial.println(nitrogen);
-  Serial.print("Soil Phosphorus: ");
-  Serial.println(phosphorus);
-  Serial.print("Soil Potassium: ");
-  Serial.println(potassium);
-
-  delay(5000); // Wait for 5 seconds
+    // Print the soil parameters
+    Serial.print("Soil Temperature: ");
+    Serial.println(temperature);
+    Serial.print("Soil Humidity: ");
+    Serial.println(humidity);
+    Serial.print("Soil Conductivity: ");
+    Serial.println(conductivity);
+    Serial.print("Soil pH: ");
+    Serial.println(pH);
+    Serial.print("Soil Nitrogen: ");
+    Serial.println(nitrogen);
+    Serial.print("Soil Phosphorus: ");
+    Serial.println(phosphorus);
+    Serial.print("Soil Potassium: ");
+    Serial.println(potassium);
+  }
   
 
   //flowsenor

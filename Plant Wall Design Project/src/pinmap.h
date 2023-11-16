@@ -15,10 +15,6 @@
 
 #define soilSensor1Tx 0 //2  //Rx to Tx
 #define soilSensor1Rx 0 //15  //Tx to Rx
-#define soilSensor2Tx 0
-#define soilSensor2Rx 0
-#define soilSensor3Tx 0
-#define soilSensor3Rx 0
 
 //#define waterLvSensor 0
 

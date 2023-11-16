@@ -14,6 +14,7 @@ class FlowSensor {
     unsigned long lastTime; // the last time the pulse was updated
     float flowRate; // the flowRate in liters
     unsigned long totalMilliLitres = 0;
+    unsigned long TargetValue = 30;
     static void increase(); // the interrupt handler function, also static
 };
 

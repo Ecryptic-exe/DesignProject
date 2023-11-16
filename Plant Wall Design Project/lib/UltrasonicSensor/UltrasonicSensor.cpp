@@ -32,7 +32,7 @@ void UltrasonicSensor::update() {
     h = h - fullTankDistance;  //5cm
     h = emptyTankDistance - h - fullTankDistance;  //20cm
 
-    // // distance in %, 0-100 %
+    // distance in %, 0-100 %
     total = emptyTankDistance-fullTankDistance;
     hp = h/total*100;
 
@@ -40,7 +40,7 @@ void UltrasonicSensor::update() {
     // Serial.print(h);
     // Serial.print(" cm");
 
-    // // Checking water level
+    // Checking water level Height in Percentage % (hp)
     if (hp >= 100) {
       hp = 100;
       Serial.print(hp);

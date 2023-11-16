@@ -16,35 +16,40 @@ void FlowSensor::begin() {
 }
 
 void FlowSensor::getflowRate() {
-  if (totalMilliLitres <= 180)
+  if (totalMilliLitres < TargetValue) // 30mL target value
     {
-      if (millis() - lastTime > 1000) { // update the flowRate every half second
-        Serial.println("valve high");
-        flowRate = (pulse * 1000 / 11); // (Pulse frequency x 1000 mL) / 11Q = flowrate in mL/min
-        //flowRate = (pulse * 60 / 11); // (Pulse frequency x 60 min) / 11Q = flowrate in L/hour
-        Serial.print(flowRate);
-        Serial.println(" mL/min   ");
-        //Serial.print(" L/h    ");
-        lastTime = millis(); // update the last time
-
-        //calculate volume
-        totalMilliLitres += flowRate;
-        // Print the cumulative total of litres flowed since starting
-        Serial.print("Output Liquid Quantity: ");        
-        Serial.print(totalMilliLitres);
-        Serial.println("mL");     
-
-        pulse = 0; // reset the pulse
+      if(millis() - lastTime <= 1000){
+        return;
       }
+
+      // update the flowRate every second
+      Serial.println("valve high");
+      flowRate = (pulse * 1000 / 60 / 11); // (Pulse frequency x 1000 mL) / 60 min / 11Q = flowrate in mL/s
+      //flowRate = (pulse * 60 / 11); // (Pulse frequency x 60 min) / 11Q = flowrate in L/hour
+      Serial.print(flowRate);
+      Serial.println(" mL/s   ");
+      //Serial.print(" L/h    ");
+      lastTime = millis(); // update the last time
+
+      //calculate volume
+      totalMilliLitres += flowRate;
+      // Print the cumulative total of litres flowed since starting
+      Serial.print("Output Liquid Quantity: ");        
+      Serial.print(totalMilliLitres);
+      Serial.println("mL");     
+
+      pulse = 0; // reset the pulse
+      
     }
-    else if (totalMilliLitres > 180)
-    {
-      lastTime = 0;
-      flowRate = 0;
-      totalMilliLitres = 0;
-      pulse = 0;
-      Serial.println("valve low");
-    }
+  else if (totalMilliLitres >= TargetValue) // 30mL
+  {
+    Serial.println("valve low");
+    // reset the value and timer
+    lastTime = 0;
+    flowRate = 0;
+    totalMilliLitres = 0;
+    pulse = 0;      
+  }
 }
 
 void FlowSensor::increase() {

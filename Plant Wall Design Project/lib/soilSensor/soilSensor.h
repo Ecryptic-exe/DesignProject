@@ -16,13 +16,11 @@ class SoilSensor {
   public:
     // SoilSensor(int RE_pin, int DE_pin, int Rx_pin, int Tx_pin);
     SoilSensor(int Rx_pin, int Tx_pin);
-    byte readMoist();
-    byte readTemp();
+    // SoilSensor(int id, int Rx_pin, int Tx_pin); // Address ID (first byte), RX, TX
+    byte readMoistTemp();
     byte readEC();
     byte readPH();
-    byte readN();
-    byte readK();
-    byte readP();
+    byte readNKP();
 };
 
 #endif

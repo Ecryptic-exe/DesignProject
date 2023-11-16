@@ -19,81 +19,41 @@
 
 // msg nanoMsg;
 
-// SoilSensor soilSensor1(1,2,soilSensor1Rx,soilSensor1Tx); // RE pin:1 DE pin:2 Rx pin:A1 Tx pin:A2
-// SoilSensor soilSensor2(3,4,soilSensor2Rx,soilSensor2Tx); // RE pin:3 DE pin:4 Rx pin:A3 Tx pin:A4
-// SoilSensor soilSensor3(5,6,soilSensor3Rx,soilSensor3Tx); // RE pin:5 DE pin:6 Rx pin:A5 Tx pin:A6
+SoilSensor soilSensor1(soilSensor1Rx,soilSensor1Tx);
+// SoilSensor soilSensor2(soilSensor2Rx,soilSensor2Tx);
+// SoilSensor soilSensor3(soilSensor3Rx,soilSensor3Tx);
 
-SolenoidValve Valve1(solenoidValve1);
-SolenoidValve Valve2(solenoidValve2);
-SolenoidValve Valve3(solenoidValve3);
+// SolenoidValve Valve1(solenoidValve1);
+// SolenoidValve Valve2(solenoidValve2);
+// SolenoidValve Valve3(solenoidValve3);
 
 // WaterFlowSensor FlowSensor1(flowSensor1, 1000);
 // WaterFlowSensor FlowSensor2(flowSensor2, 1000);
 // WaterFlowSensor FlowSensor3(flowSensor3, 1000);
 
-waterPump pump(waterPumpPinA, waterPumpPinB);
+// waterPump pump(waterPumpPinA, waterPumpPinB);
 
 void pinSetup(){
 
 };
 
-// void readSoilSensor(){  // Sample placeholder
-//     byte moist1 = soilSensor1.readMoist();
-//     byte moist2 = soilSensor2.readMoist();
-//     byte moist3 = soilSensor3.readMoist();
-
-//     Serial.print("Moisture Sensor #1: ");
-//     Serial.println(moist1);
-
-//     Serial.print("Moisture Sensor #2: ");
-//     Serial.println(moist2);
-
-//     Serial.print("Moisture Sensor #3: ");
-//     Serial.println(moist3);
-// };
-
-void valveInit(){
-  Valve1.initializeValve();
-  // Valve2.initializeValve();
-  // Valve3.initializeValve();
-}
-
-void testValve(){
-  Valve1.valveClose();
-  // Valve2.valveClose();
-  // Valve3.valveClose();
-  delay(3000);
-  Valve1.valveOpen();
-  // Valve2.valveOpen();
-  // Valve3.valveOpen();
-  delay(3000);
-}
+void readSoilSensor1(){  // Sample placeholder
+  soilSensor1.readMoistTemp();
+  soilSensor1.readEC();
+  soilSensor1.readPH();
+  soilSensor1.readNKP();
+};
 
 /////////////////////////////////////////
 
 void setup() {
   pinSetup();
 
-  
-  valveInit();
-
-//dht.begin();
-
-  //Serial.begin(9600);
-  //nanoMsg.init(&Serial);
-
-  // pump.initializePump();
+  Serial.begin(9600);
 
 }
 
 void loop() {
+  readSoilSensor1();
 
-  pump.pumpRate(90);
-
-  testValve();
-
-  // if(!nanoMsg.read()){
-  //   return; 
-  // }
 }
-

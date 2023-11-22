@@ -1,26 +1,10 @@
-#ifndef SoilSensor_h
-#define SoilSensor_h
+#ifndef SOILSENSOR_H
+#define SOILSENSOR_H
 
-#include "Arduino.h"
-#include <SoftwareSerial.h>
+#include <Arduino.h>
 
-class SoilSensor {
-
-  private:
-    void printHexByte(byte b);
-    byte readSensor(const byte* command);
-    SoftwareSerial _mod;
-    // int _RE;
-    // int _DE;
-
-  public:
-    // SoilSensor(int RE_pin, int DE_pin, int Rx_pin, int Tx_pin);
-    SoilSensor(int Rx_pin, int Tx_pin);
-    // SoilSensor(int id, int Rx_pin, int Tx_pin); // Address ID (first byte), RX, TX
-    byte readMoistTemp();
-    byte readEC();
-    byte readPH();
-    byte readNKP();
-};
+void conductivity(); //measure soil conductivity
+void pH(); //measure soil pH
+void nitrogen(); //measure soil nitrogen
 
 #endif

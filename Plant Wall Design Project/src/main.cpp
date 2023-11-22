@@ -1,59 +1,120 @@
 #include <Arduino.h>
 #include <Adafruit_Sensor.h>
-#include <PubSubClient.h>
 #include <Adafruit_I2CDevice.h>
 #include <SPI.h>
-#include <WiFi.h>
 
 #include "DHT.h"
-#include "flowSensor.h"
+#include "FlowSensor.h"
 #include "msg.h"
 #include "soilSensor.h"
 #include "solenoidValve.h"
 //#include "waterLvSensor.h"
+#include "UltrasonicSensor.h"
 #include "waterPump.h"
 
 #include "pinmap.h"
 
-// DHT dht(DHTPIN, DHTTYPE);
+FlowSensor flowSensor(FlowSensor1);
 
-// msg nanoMsg;
-
-SoilSensor soilSensor1(soilSensor1Rx,soilSensor1Tx);
-// SoilSensor soilSensor2(soilSensor2Rx,soilSensor2Tx);
-// SoilSensor soilSensor3(soilSensor3Rx,soilSensor3Tx);
-
-// SolenoidValve Valve1(solenoidValve1);
+SolenoidValve Valve1(solenoidValve1);
 // SolenoidValve Valve2(solenoidValve2);
 // SolenoidValve Valve3(solenoidValve3);
 
-// WaterFlowSensor FlowSensor1(flowSensor1, 1000);
-// WaterFlowSensor FlowSensor2(flowSensor2, 1000);
-// WaterFlowSensor FlowSensor3(flowSensor3, 1000);
+waterPump pump(waterPumpPinA, waterPumpPinB);
+// UltrasonicSensor waterLevelSensor(trigPin, echoPin);
 
-// waterPump pump(waterPumpPinA, waterPumpPinB);
+
 
 void pinSetup(){
 
 };
 
-void readSoilSensor1(){  // Sample placeholder
-  soilSensor1.readMoistTemp();
-  soilSensor1.readEC();
-  soilSensor1.readPH();
-  soilSensor1.readNKP();
-};
 
+void valveInit(){
+  Valve1.initializeValve();
+  // Valve2.initializeValve();
+  // Valve3.initializeValve();
+}
+
+void testValve(){
+  //Valve1.valveClose();
+  // Valve2.valveClose();
+  // Valve3.valveClose();
+  delay(3000);
+  //Valve1.valveOpen();
+  // Valve2.valveOpen();
+  // Valve3.valveOpen();
+  delay(3000);
+}
 /////////////////////////////////////////
 
 void setup() {
+  Serial.begin(9600);
+  Serial2.begin(9600); // NPK communicates at 9600 bps
+  //soilSensor.begin(); // Initialize the communication with the soil sensor
+  flowSensor.begin();
   pinSetup();
 
-  Serial.begin(9600);
+  // waterLevelSensor.begin();// Configure ultrasonic sensor
+
+  valveInit(); // Configure solenoid valve
+
+
+  //nanoMsg.init(&Serial);
+
+  pump.initializePump(); // Initialize the pump
 
 }
 
 void loop() {
-  readSoilSensor1();
+  //soilSensor
+  byte temp[] = {0x01,0x03,0x00,0x12,0x00,0x02,0x64,0x0e}; //temp
+  byte receivedData[9];
 
+  Serial2.write(temp, sizeof(temp));  // Send the query data to the NPK sensor
+  delay(1000);  // Wait for 1 second
+
+  Serial2.readBytes(receivedData, sizeof(receivedData));  // Read the received data into the receivedData array
+
+  // Parse and print the received data in decimal format
+  unsigned int soilTemperature = (receivedData[5] << 8) | receivedData[6];
+  unsigned int soilHumidity = (receivedData[3] << 8) | receivedData[4];
+
+  Serial.print("Soil Temperature: ");
+  Serial.println((float)soilTemperature / 10.0);
+  Serial.print("Soil Humidity: ");
+  Serial.println((float)soilHumidity / 10.0);
+
+  //Soil Humidity Contrl Pump
+  if (soilHumidity < 30) {
+    pump.pumpRate(90);
+  }
+  else {
+    pump.pumpRate(0);
+  }
+
+  conductivity(); // Call the conductivity function
+  pH(); // Call the pH function
+  nitrogen(); // Call the nitrogen function
+
+  // Get Flowrate control Valve
+  flowSensor.getflowRate();
+  if (flowSensor.getflowRate() == true) {
+    Valve1.valveOpen();}
+  else {
+      Valve1.valveClose();}
+
+  //ultrasonic
+  // waterLevelSensor.update();
+
+  //waterPump
+  // pump.pumpRate(90);
+
+  //solenoid valve
+  // testValve();
+
+  // if(!nanoMsg.read()){
+  //   return; 
+  // }
 }
+

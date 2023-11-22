@@ -1,13 +1,14 @@
+#include <Arduino.h>
+
 #ifndef FLOWSENSOR_H
 #define FLOWSENSOR_H
 
-#include <Arduino.h>
-
 class FlowSensor {
+
   public:
     FlowSensor(int pin); // constructor
     void begin(); // initialize the sensor
-    void getflowRate(); // get the flowRate in liters
+    bool getflowRate(); // get the flowRate in liters
   private:
     int sensorPin; // the pin number of the sensor
     static volatile long pulse; // the number of pulses from the sensor, make it static

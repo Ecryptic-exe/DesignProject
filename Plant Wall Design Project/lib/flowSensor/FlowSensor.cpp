@@ -15,17 +15,18 @@ void FlowSensor::begin() {
   attachInterrupt(digitalPinToInterrupt(sensorPin), FlowSensor::increase, RISING); // attach the interrupt handler
 }
 
-void FlowSensor::getflowRate() {
+bool FlowSensor::getflowRate() {
   if (totalMilliLitres < TargetValue) // 30mL target value
     {
       if(millis() - lastTime <= 1000){
-        return;
-      }
 
       // update the flowRate every second
       Serial.println("valve high");
+      //Valve1.valveOpen();
+
       flowRate = (pulse * 1000 / 60 / 11); // (Pulse frequency x 1000 mL) / 60 min / 11Q = flowrate in mL/s
       //flowRate = (pulse * 60 / 11); // (Pulse frequency x 60 min) / 11Q = flowrate in L/hour
+
       Serial.print(flowRate);
       Serial.println(" mL/s   ");
       //Serial.print(" L/h    ");
@@ -40,10 +41,13 @@ void FlowSensor::getflowRate() {
 
       pulse = 0; // reset the pulse
       
+      return false;
+      }
     }
   else if (totalMilliLitres >= TargetValue) // 30mL
   {
     Serial.println("valve low");
+    return true;
     // reset the value and timer
     lastTime = 0;
     flowRate = 0;

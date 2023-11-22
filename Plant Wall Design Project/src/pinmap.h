@@ -3,13 +3,13 @@
 #define trigPin 0 //2
 #define echoPin 0 //3
 
-#define DHTPIN 0
-#define DHTTYPE DHT22
+// #define DHTPIN 0
+// #define DHTTYPE DHT22
 
 #define FlowSensor1 2
 #define FlowSensor2 0
 #define FlowSensor3 0
-#define solenoidValve1 17
+#define solenoidValve1 33
 #define solenoidValve2 0
 #define solenoidValve3 0
 

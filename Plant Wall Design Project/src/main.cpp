@@ -14,21 +14,13 @@
 
 #include "pinmap.h"
 
-SoilSensor soilSensor(Serial2); // Rename the object as soilSensor
-//FlowSensor flowSensor(FlowSensor1);
+FlowSensor flowSensor(FlowSensor1);
 
-
-// msg nanoMsg;
-
-// SoilSensor soilSensor1(soilSensor1Rx,soilSensor1Tx); // RE pin:1 DE pin:2 Rx pin:A1 Tx pin:A2
-// SoilSensor soilSensor2(soilSensor2Rx,soilSensor2Tx); // RE pin:3 DE pin:4 Rx pin:A3 Tx pin:A4
-// SoilSensor soilSensor3(soilSensor3Rx,soilSensor3Tx); // RE pin:5 DE pin:6 Rx pin:A5 Tx pin:A6
-
-//SolenoidValve Valve1(solenoidValve1);
+SolenoidValve Valve1(solenoidValve1);
 // SolenoidValve Valve2(solenoidValve2);
 // SolenoidValve Valve3(solenoidValve3);
 
-// waterPump pump(waterPumpPinA, waterPumpPinB);
+waterPump pump(waterPumpPinA, waterPumpPinB);
 // UltrasonicSensor waterLevelSensor(trigPin, echoPin);
 
 
@@ -37,23 +29,9 @@ void pinSetup(){
 
 };
 
-// void readSoilSensor(){  // Sample placeholder
-//     byte moist1 = soilSensor1.readMoist();
-//     byte moist2 = soilSensor2.readMoist();
-//     byte moist3 = soilSensor3.readMoist();
-
-//     Serial.print("Moisture Sensor #1: ");
-//     Serial.println(moist1);
-
-//     Serial.print("Moisture Sensor #2: ");
-//     Serial.println(moist2);
-
-//     Serial.print("Moisture Sensor #3: ");
-//     Serial.println(moist3);
-// };
 
 void valveInit(){
-  // Valve1.initializeValve();
+  Valve1.initializeValve();
   // Valve2.initializeValve();
   // Valve3.initializeValve();
 }
@@ -72,54 +50,59 @@ void testValve(){
 
 void setup() {
   Serial.begin(9600);
-  soilSensor.begin(); // Initialize the communication with the soil sensor
-  //flowSensor.begin();
+  Serial2.begin(9600); // NPK communicates at 9600 bps
+  //soilSensor.begin(); // Initialize the communication with the soil sensor
+  flowSensor.begin();
   pinSetup();
 
   // waterLevelSensor.begin();// Configure ultrasonic sensor
 
-  // valveInit(); // Configure solenoid valve
+  valveInit(); // Configure solenoid valve
 
 
   //nanoMsg.init(&Serial);
 
-  // pump.initializePump(); // Initialize the pump
+  pump.initializePump(); // Initialize the pump
 
 }
 
 void loop() {
-
   //soilSensor
-  if (millis() - soilSensor.getLastQueryTime() >= 1000) {
-    // If yes, get the soil parameters
-    float temperature = soilSensor.getTemperature(); // Use the soilSensor object
-    float humidity = soilSensor.getHumidity(); // Use the soilSensor object
-    float conductivity = soilSensor.getConductivity(); // Use the soilSensor object
-    float pH = soilSensor.getpH(); // Use the soilSensor object
-    float nitrogen = soilSensor.getNitrogen(); // Use the soilSensor object
-    float phosphorus = soilSensor.getPhosphorus(); // Use the soilSensor object
-    float potassium = soilSensor.getPotassium(); // Use the soilSensor object
+  byte temp[] = {0x01,0x03,0x00,0x12,0x00,0x02,0x64,0x0e}; //temp
+  byte receivedData[9];
 
-    // Print the soil parameters
-    Serial.print("Soil Temperature: ");
-    Serial.println(temperature);
-    Serial.print("Soil Humidity: ");
-    Serial.println(humidity);
-    Serial.print("Soil Conductivity: ");
-    Serial.println(conductivity);
-    Serial.print("Soil pH: ");
-    Serial.println(pH);
-    Serial.print("Soil Nitrogen: ");
-    Serial.println(nitrogen);
-    Serial.print("Soil Phosphorus: ");
-    Serial.println(phosphorus);
-    Serial.print("Soil Potassium: ");
-    Serial.println(potassium);
+  Serial2.write(temp, sizeof(temp));  // Send the query data to the NPK sensor
+  delay(1000);  // Wait for 1 second
+
+  Serial2.readBytes(receivedData, sizeof(receivedData));  // Read the received data into the receivedData array
+
+  // Parse and print the received data in decimal format
+  unsigned int soilTemperature = (receivedData[5] << 8) | receivedData[6];
+  unsigned int soilHumidity = (receivedData[3] << 8) | receivedData[4];
+
+  Serial.print("Soil Temperature: ");
+  Serial.println((float)soilTemperature / 10.0);
+  Serial.print("Soil Humidity: ");
+  Serial.println((float)soilHumidity / 10.0);
+
+  //Soil Humidity Contrl Pump
+  if (soilHumidity < 30) {
+    pump.pumpRate(90);
   }
-  
+  else {
+    pump.pumpRate(0);
+  }
 
-  //flowsenor
-  //flowSensor.getflowRate();
+  conductivity(); // Call the conductivity function
+  pH(); // Call the pH function
+  nitrogen(); // Call the nitrogen function
+
+  // Get Flowrate control Valve
+  flowSensor.getflowRate();
+  if (flowSensor.getflowRate() == true) {
+    Valve1.valveOpen();}
+  else {
+      Valve1.valveClose();}
 
   //ultrasonic
   // waterLevelSensor.update();

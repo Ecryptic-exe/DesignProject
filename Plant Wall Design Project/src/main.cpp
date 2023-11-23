@@ -99,9 +99,9 @@ void loop() {
   // Get Flowrate control Valve
   flowSensor.getflowRate();
   //pump.pumpRate(90);
-  if (flowSensor.getflowRate() == false) {
+  if (flowSensor.getflowRate() == true) {
     Valve1.valveOpen();}
-  else if(flowSensor.getflowRate() == true) {
+  else if(flowSensor.getflowRate() == false) {
       Valve1.valveClose();
       pump.pumpRate(0);
     }

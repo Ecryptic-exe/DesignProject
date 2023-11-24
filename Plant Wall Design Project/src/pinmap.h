@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
-#define trigPin 0 //2
-#define echoPin 0 //3
+#define trigPin 13
+#define echoPin 12
 
 // #define DHTPIN 0
 // #define DHTTYPE DHT22

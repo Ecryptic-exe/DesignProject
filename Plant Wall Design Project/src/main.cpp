@@ -3,7 +3,6 @@
 #include <Adafruit_I2CDevice.h>
 #include <SPI.h>
 
-#include "DHT.h"
 #include "FlowSensor.h"
 #include "msg.h"
 #include "soilSensor.h"
@@ -30,18 +29,18 @@ void pinSetup(){
 
 
 void valveInit(){
-  // Valve1.initializeValve();
+  Valve1.initializeValve();
   // Valve2.initializeValve();
   // Valve3.initializeValve();
 }
 
 void testValve(){
-  // digitalWrite(solenoidValve1, HIGH);
+  digitalWrite(solenoidValve1, HIGH);
   // Valve1.valveClose();
   // Valve2.valveClose();
   // Valve3.valveClose();
   delay(3000);
-  // digitalWrite(solenoidValve1, LOW);
+  digitalWrite(solenoidValve1, LOW);
   // Valve1.valveOpen();
   // Valve2.valveOpen();
   // Valve3.valveOpen();
@@ -86,7 +85,7 @@ void loop() {
   Serial.print("Soil Humidity: ");
   Serial.println((float)soilHumidity / 10.0);
 
-  //Soil Humidity Contrl Pump
+  // //Soil Humidity Contrl Pump
   if (soilHumidity < 30) {
     pump.pumpRate(90);
 
@@ -120,7 +119,7 @@ void loop() {
   // pump.pumpRate(90);
 
   //solenoid valve
-  // testValve();
+  testValve();
 
   // if(!nanoMsg.read()){
   //   return; 

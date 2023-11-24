@@ -3,12 +3,11 @@
 #include <Adafruit_I2CDevice.h>
 #include <SPI.h>
 
-#include "DHT.h"
 #include "FlowSensor.h"
 #include "msg.h"
 #include "soilSensor.h"
 #include "solenoidValve.h"
-//#include "waterLvSensor.h"
+// #include "waterLvSensor.h"
 #include "UltrasonicSensor.h"
 #include "waterPump.h"
 
@@ -21,13 +20,12 @@ SolenoidValve Valve1(solenoidValve1);
 // SolenoidValve Valve3(solenoidValve3);
 
 waterPump pump(waterPumpPinA, waterPumpPinB);
-// UltrasonicSensor waterLevelSensor(trigPin, echoPin);
+UltrasonicSensor waterLevelSensor(trigPin, echoPin);
 
 
 void pinSetup(){
 
 };
-
 
 void valveInit(){
   Valve1.initializeValve();
@@ -36,11 +34,13 @@ void valveInit(){
 }
 
 void testValve(){
-  //Valve1.valveClose();
+  digitalWrite(solenoidValve1, HIGH);
+  // Valve1.valveClose();
   // Valve2.valveClose();
   // Valve3.valveClose();
   delay(3000);
-  //Valve1.valveOpen();
+  digitalWrite(solenoidValve1, LOW);
+  // Valve1.valveOpen();
   // Valve2.valveOpen();
   // Valve3.valveOpen();
   delay(3000);
@@ -50,11 +50,11 @@ void testValve(){
 void setup() {
   Serial.begin(9600);
   Serial2.begin(9600); // NPK communicates at 9600 bps
-  //soilSensor.begin(); // Initialize the communication with the soil sensor
+  // soilSensor.begin(); // Initialize the communication with the soil sensor
   flowSensor.begin();
   pinSetup();
 
-  // waterLevelSensor.begin();// Configure ultrasonic sensor
+  waterLevelSensor.begin();// Configure ultrasonic sensor
 
   valveInit(); // Configure solenoid valve
 
@@ -84,30 +84,36 @@ void loop() {
   // Serial.print("Soil Humidity: ");
   // Serial.println((float)soilHumidity / 10.0);
 
-  // //Soil Humidity Contrl Pump
+  
+  // // //Soil Humidity Contrl Pump
   // if (soilHumidity < 30) {
   //   pump.pumpRate(90);
+
+  //   // Get Flowrate control Valve
+  //   flowSensor.getflowRate();
+  //   if (flowSensor.totalMilliLitres < flowSensor.TargetValue) {
+  //     Valve1.valveOpen();
+  //     // Serial.println("Debug");
+  //     }
+  //   else if(flowSensor.totalMilliLitres >= flowSensor.TargetValue) {
+  //       Valve1.valveClose();
+  //       // Serial.println("Close Debug");
+  //       pump.pumpRate(0);
+  //       flowSensor.reset();
+  //     }
   // }
   // else {
   //   pump.pumpRate(0);
   // }
 
+
   // conductivity(); // Call the conductivity function
   // pH(); // Call the pH function
   // nitrogen(); // Call the nitrogen function
 
-  // Get Flowrate control Valve
-  flowSensor.getflowRate();
-  //pump.pumpRate(90);
-  if (flowSensor.flowRate >= flowSensor.TargetValue) {
-    Valve1.valveOpen();}
-  else if(flowSensor.flowRate < flowSensor.TargetValue) {
-      Valve1.valveClose();
-      pump.pumpRate(0);
-    }
 
   //ultrasonic
-  // waterLevelSensor.update();
+  waterLevelSensor.update();
 
   //waterPump
   // pump.pumpRate(90);
@@ -118,5 +124,6 @@ void loop() {
   // if(!nanoMsg.read()){
   //   return; 
   // }
+  Serial.println("//////////");
 }
 

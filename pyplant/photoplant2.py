@@ -2,7 +2,11 @@ from inference.models.utils import get_roboflow_model
 import cv2
 
 # Image path
-image_path = "shutterstock_152500682-768x508.jpg"
+# image_path = "shutterstock_152500682-768x508.jpg"
+image_path = "3fdd0c2b-4683-46ee-a4e0-e18db40326fe.jpeg"
+# image_path = "WhatsApp Image 2023-12-12 at 10.06.08 AM.jpeg"
+# image_path = "WhatsApp Image 2023-12-12 at 10.06.09 AM.jpeg"
+
 
 # Roboflow model
 model_name = "design-project-l6fmn"

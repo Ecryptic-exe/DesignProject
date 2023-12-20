@@ -4,9 +4,16 @@ import cv2 as cv
 
 rf = Roboflow(api_key="jf0Up8otdUB1r0ua9mLG")
 project = rf.workspace().project("design-project-l6fmn")
-model = project.version(3).model
+model = project.version(2).model
 
-f = cv.VideoCapture(0)
+# f = cv.VideoCapture(0)
+f = cv.VideoCapture('GettyImages-1205587398.jpg')
+# f = cv.VideoCapture('shutterstock_152500682-768x508.jpg')
+# f = cv.VideoCapture('WhatsApp Image 2023-12-12 at 10.06.08 AM.jpeg')
+# f = cv.VideoCapture('WhatsApp Image 2023-12-12 at 10.06.09 AM.jpeg')
+# f = cv.VideoCapture('WhatsApp Image 2023-12-12 at 10.18.04 AM.jpeg')
+# f = cv.VideoCapture('3fdd0c2b-4683-46ee-a4e0-e18db40326fe.jpeg')
+
 
 while(f.isOpened()):
     ret, frame = f.read()
@@ -32,7 +39,7 @@ while(f.isOpened()):
 
         cv.imshow('Frame', frame)
 
-    if cv.waitKey(10) == ord('q'):
+    if cv.waitKey(1) == ord('q'):
         break
 
 f.release()

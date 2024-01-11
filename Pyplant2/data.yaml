@@ -1,0 +1,13 @@
+train: C:\Users\user\Downloads\Design Project.v2i.yolov5pytorch\valid
+val: C:\Users\user\Downloads\Design Project.v2i.yolov5pytorch\valid
+test: C:\Users\user\Downloads\Design Project.v2i.yolov5pytorch\test
+
+nc: 3
+names: ['Dead-Plants', 'flowers', 'plants']
+
+roboflow:
+  workspace: ivelwl
+  project: design-project-l6fmn
+  version: 2
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/ivelwl/design-project-l6fmn/dataset/2

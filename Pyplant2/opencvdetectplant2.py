@@ -1,18 +1,13 @@
 from roboflow import Roboflow
 import cv2 as cv
+from ultralytics import YOLO
 
-
-rf = Roboflow(api_key="jf0Up8otdUB1r0ua9mLG")
-project = rf.workspace().project("design-project-l6fmn")
-model = project.version(2).model
+# Load a model
+model = YOLO("data.yaml")  # build a new model from scratch
+model = YOLO("yolov8n.pt")  # load a pretrained model (recommended for training)
 
 # f = cv.VideoCapture(0)
 f = cv.VideoCapture('GettyImages-1205587398.jpg')
-# f = cv.VideoCapture('shutterstock_152500682-768x508.jpg')
-# f = cv.VideoCapture('WhatsApp Image 2023-12-12 at 10.06.08 AM.jpeg')
-# f = cv.VideoCapture('WhatsApp Image 2023-12-12 at 10.06.09 AM.jpeg')
-# f = cv.VideoCapture('WhatsApp Image 2023-12-12 at 10.18.04 AM.jpeg')
-# f = cv.VideoCapture('3fdd0c2b-4683-46ee-a4e0-e18db40326fe.jpeg')
 
 
 while(f.isOpened()):
